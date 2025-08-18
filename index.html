@@ -4,16 +4,21 @@
   <meta charset="UTF-8">
   <title>Scopri la foto</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    .sfondo-menu {
+     body {
       background-color: #F7EAEC; /* sfondo rosa cipria */
+      margin: 0;
+    }
+    .contenitore {
+      background-color: #F7EAEC; 
+      min-height: 100vh;
       display: flex;
-      flex-direction: column;   /* titolo sopra, poi immagine, poi bottone */
-      justify-content: center;  /* centra verticalmente */
-      align-items: center;      /* centra orizzontalmente */
-      min-height: 100vh;        /* prende tutta l’altezza dello schermo */
-      padding: 20px;            /* margini interni per respirare */
-      box-sizing: border-box;   /* padding incluso nella larghezza */
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
     }
 
     .titolo-principale {
@@ -55,12 +60,15 @@
     }
   </style>
 </head>
-<body class="sfondo-menu">
+<body>
+  <div  class="contenitore">
   <h1 class="titolo-principale">🎉 Diamo inizio alle danze!</h1>
   <img src="immagini/savethedate.jpg" alt="foto nostra a san pietro">
   <a href="https://drive.google.com/file/d/1g0YMRuIT1LD-i-oS2Y6DHuuW7IeC4LIV/view" target="_blank">Unisciti a noi</a>
+</div>
 </body>
 </html>
+
 
 
 
