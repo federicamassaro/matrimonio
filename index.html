@@ -27,11 +27,17 @@
     }
 
     img {
-      max-width: 40%;   /* immagine responsive */
-      height: auto;     
-      display: block;  
-      margin: 20px auto;  
+      max-width: 40%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
     }
+
+    @media (max-width: 600px) {
+        img {
+            max-width: 80%; /* su smartphone diventa più piccola */
+        }
+  }
 
     a {
       display: inline-block;
@@ -55,6 +61,7 @@
   <a href="https://drive.google.com/file/d/1g0YMRuIT1LD-i-oS2Y6DHuuW7IeC4LIV/view" target="_blank">Unisciti a noi</a>
 </body>
 </html>
+
 
 
 
