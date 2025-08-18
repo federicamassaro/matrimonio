@@ -5,26 +5,29 @@
   <title>Scopri la foto</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap">
   <style>
-    .sfondo-menu{
-      background-color: #FFC9CB;
+    .sfondo-menu {
+      background-color: #FFC9CB; /* sfondo rosa cipria */
       text-align: center;
       margin-top: 100px;
     }
-    .titolo-principale{
-         font-family: 'Dancing Script', cursive; /* Tipo di carattere */
-         font-size: 36px;                  /* Dimensione del testo */
-         color: #E0B0FF;                 /*Colore del testo */
-         font-weight: bold;                 /* Grassetto (normal, bold, 100-900) */
-         text-align: center;                /* Allineamento: left, center, right */
-         letter-spacing: 2px;               /* Spaziatura tra le lettere */
-         text-transform: uppercase;         /* Trasforma il testo: uppercase, lowercase, capitalize */
+
+    .titolo-principale {
+      font-family: 'Dancing Script', cursive; /* Tipo di carattere */
+      font-size: 36px;                        /* Dimensione del testo */
+      color: #E0B0FF;                         /* Colore del testo */
+      font-weight: bold;                      /* Grassetto */
+      text-align: center;                     /* Allineamento */
+      letter-spacing: 2px;                    /* Spaziatura lettere */
+      text-transform: uppercase;              /* Tutto maiuscolo */
     }
+
     img {
-         /* non supera mai la larghezza del contenitore */
-         height: auto;    /* mantiene le proporzioni */
-         display: block;  /* utile per centrare con margin */
-         margin: 0 auto;  /* centra l’immagine orizzontalmente */
+      max-width: 40%;   /* immagine responsive */
+      height: auto;     
+      display: block;  
+      margin: 20px auto;  
     }
+
     a {
       display: inline-block;
       padding: 15px 30px;
@@ -35,6 +38,7 @@
       background-color: #007BFF;
       border-radius: 10px;
     }
+
     a:hover {
       background-color: #0056b3;
     }
@@ -42,21 +46,7 @@
 </head>
 <body class="sfondo-menu">
   <h1 class="titolo-principale">🎉 Diamo inizio alle danze!</h1>
-  <img  src="immagini/savethedate.jpg" alt="foto nostra a san pietro">
-  <div></div>
+  <img src="immagini/savethedate.jpg" alt="foto nostra a san pietro">
   <a href="https://drive.google.com/file/d/1g0YMRuIT1LD-i-oS2Y6DHuuW7IeC4LIV/view" target="_blank">Unisciti a noi</a>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
