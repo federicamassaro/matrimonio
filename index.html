@@ -29,47 +29,49 @@
       text-align: center;                     /* Allineamento */
       letter-spacing: 2px;                    /* Spaziatura lettere */
       text-transform: uppercase;              /* Tutto maiuscolo */
+      margin-bottom: 30px;
     }
 
     img {
       max-width: 40%;
       height: auto;
       display: block;
-      margin: 0 auto;
+      margin: 0 auto 20px auto;
     }
 
     @media (max-width: 600px) {
         img {
             max-width: 80%; /* su smartphone diventa più piccola */
         }
-  }
+    }
 
-    a {
+    .pulsante {
       display: inline-block;
       padding: 15px 30px;
-      margin-top: 20px;
+      margin: 10px;
       font-size: 18px;
       text-decoration: none;
       color: white;
       background-color: #007BFF;
       border-radius: 10px;
+      transition: background-color 0.3s;
     }
 
-    a:hover {
+    .pulsante:hover {
       background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <div  class="contenitore">
-  <h1 class="titolo-principale">🎉 Diamo inizio alle danze!</h1>
-  <img src="immagini/savethedate.jpg" alt="foto nostra a san pietro">
-  <a href="https://drive.google.com/file/d/1g0YMRuIT1LD-i-oS2Y6DHuuW7IeC4LIV/view" target="_blank">Unisciti a noi</a>
-</div>
+  <div class="contenitore">
+    <h1 class="titolo-principale">🎉 Diamo inizio alle danze!</h1>
+    <img src="immagini/spiaggiarpromesse.jpg" alt="foto nostra a san pietro">
+
+    <!-- Bottone per le vostre storie -->
+    <a href="storie.html" class="pulsante">Le nostre storie</a>
+
+    <!-- Bottone per upload invitati -->
+    <a href="gallery.html" class="pulsante">Galleria</a>
+  </div>
 </body>
 </html>
-
-
-
-
-
