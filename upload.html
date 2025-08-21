@@ -1,78 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Carica Foto</title>
-  <style>
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const coppia = params.get("coppia");
-
-    fetch(`https://matrimoniome.appspot.com/config/${coppia}.json`)
-      .then(res => res.json())
-      .then(cfg => {
-        document.body.style.backgroundColor = cfg.bgColor;
-        document.body.style.color = cfg.textColor;
-      });
-  </script>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-    }
-    h1 { color: #FF4CAA; }
-    .btn {
-      background: black;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Upload Foto - {{ coppia }}</title>
+    <style>
+        body {
+            background-color: {{ colore_sfondo }};
+            font-family: Arial, sans-serif;
+        }
+        input[type=file] {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Carica una o più foto</h1>
-  <input type="file" id="fileInput" multiple>
-  <button onclick="uploadPhotos()">Carica</button>
-  <p id="status"></p>
+    <h1>Carica foto per {{ coppia }}</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="foto" multiple>
+        <button type="submit">Carica</button>
+    </form>
 
-  <a class="btn" id="galleryBtn">Vai alla Galleria</a>
-  <a class="btn" id="homeBtn">Home</a>
+    <script>
+        const form = document.getElementById("uploadForm");
+        const coppia = "{{ coppia }}";
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const coppia = params.get("coppia") || "default";
-
-    document.getElementById("galleryBtn").href = `gallery.html?coppia=${coppia}`;
-    document.getElementById("homeBtn").href = `index.html?coppia=${coppia}`;
-
-    function uploadPhotos() {
-      const files = document.getElementById("fileInput").files;
-      if (!files.length) {
-        alert("Seleziona almeno una foto!");
-        return;
-      }
-
-      const formData = new FormData();
-      for (let i = 0; i < files.length; i++) {
-        formData.append("foto", files[i]);
-      }
-
-      fetch(`https://matrimoniome.appspot.com/upload?coppia=${coppia}`, {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("status").textContent = "Foto caricate con successo!";
-      })
-      .catch(() => {
-        document.getElementById("status").textContent = "Errore durante il caricamento.";
-      });
-    }
-  </script>
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            fetch(`/upload?coppia=${coppia}`, {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(result => {
+                if(result.success){
+                    alert("Foto caricate con successo!");
+                    form.reset();
+                } else {
+                    alert("Errore: " + result.error);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
