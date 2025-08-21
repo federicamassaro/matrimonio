@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Le nostre storie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      background-color: #F7EAEC;
+      font-family: 'Dancing Script', cursive;
+    }
+
+    .contenitore-storia {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 44px;
+      color: #FF4CAA;
+      margin-bottom: 20px;
+    }
+
+    .foto-storia {
+      max-width: 80%;
+      height: auto;
+      margin: 20px 0;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    p {
+      font-size: 20px;
+      color: #333;
+      max-width: 800px;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 32px; }
+      p { font-size: 16px; }
+      .foto-storia { max-width: 90%; }
+    }
+
+    a.torna-home {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 25px;
+      background-color: #FF4CAA;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+    }
+
+    a.torna-home:hover {
+      background-color: #d43d8b;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenitore-storia">
+    <h1>La nostra storia</h1>
+
+    <img class="foto-storia" src="immagini/disneyland.jpg" alt="Foto nostra 1">
+    <p>Qui è iniziato tutto, un giorno speciale a San Pietro.</p>
+
+    <img class="foto-storia" src="immagini/alpaca.jpg" alt="Foto nostra 2">
+    <p>Il nostro primo viaggio insieme, ricordi indimenticabili.</p>
+
+    <img class="foto-storia" src="immagini/aliceeur.jpg" alt="Foto nostra 3">
+    <p>Preparativi e momenti di gioia condivisa con amici e famiglia.</p>
+
+    <img class="foto-storia" src="immagini/emanuelalagrande.jpg" alt="Foto nostra 3">
+    <p>ed anche se era due metri più alta di me</p>
+
+    <img class="foto-storia" src="immagini/matrimoniofrancesca.jpg" alt="Foto nostra 3">
+    <p>Preparativi e momenti di gioia condivisa con amici e famiglia.</p>
+    
+    <a class="torna-home" href="index.html">Torna alla Home</a>
+  </div>
+</body>
+</html>
