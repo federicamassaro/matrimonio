@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Scopri la foto</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matrimonio - Home</title>
   <style>
-     body {
-      background-color: #F7EAEC; /* sfondo rosa cipria */
-      margin: 0;
-    }
-    .contenitore {
+    body {
       background-color: #F7EAEC; 
       min-height: 100vh;
       display: flex;
@@ -20,58 +14,31 @@
       text-align: center;
       padding: 20px;
     }
-
-    .titolo-principale {
-      font-family: 'Dancing Script', cursive; /* Tipo di carattere */
-      font-size: 44px;                        /* Dimensione del testo */
-      color: #FF4CAA;                         /* Colore del testo */
-      font-weight: bold;                      /* Grassetto */
-      text-align: center;                     /* Allineamento */
-      letter-spacing: 2px;                    /* Spaziatura lettere */
-      text-transform: uppercase;              /* Tutto maiuscolo */
-      margin-bottom: 30px;
+    h1 {
+      color: #FF4CAA;
     }
-
-    img {
-      max-width: 40%;
-      height: auto;
-      display: block;
-      margin: 0 auto 20px auto;
-    }
-
-    @media (max-width: 600px) {
-        img {
-            max-width: 80%; /* su smartphone diventa più piccola */
-        }
-    }
-
-    .pulsante {
-      display: inline-block;
-      padding: 15px 30px;
-      margin: 10px;
-      font-size: 18px;
-      text-decoration: none;
+    .btn {
+      background: black;
       color: white;
-      background-color: #007BFF;
-      border-radius: 10px;
-      transition: background-color 0.3s;
-    }
-
-    .pulsante:hover {
-      background-color: #0056b3;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 18px;
+      margin: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="contenitore">
-    <h1 class="titolo-principale">🎉 Diamo inizio alle danze!</h1>
-    <img src="immagini/spiaggiarpromesse.jpg" alt="foto nostra a san pietro">
+  <h1>Benvenuti al Matrimonio</h1>
+  <a class="btn" id="galleryBtn">Vai alla Galleria</a>
+  <a class="btn" id="uploadBtn">Carica una Foto</a>
 
-    <!-- Bottone per le vostre storie -->
-    <a href="storie.html" class="pulsante">Le nostre storie</a>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const coppia = params.get("coppia") || "default";
 
-    <!-- Bottone per upload invitati -->
-    <a href="gallery.html" class="pulsante">Galleria</a>
-  </div>
+    document.getElementById("galleryBtn").href = `gallery.html?coppia=${coppia}`;
+    document.getElementById("uploadBtn").href = `upload.html?coppia=${coppia}`;
+  </script>
 </body>
 </html>
