@@ -2,43 +2,63 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Matrimonio - Home</title>
+  <title>Matrimonio</title>
   <style>
     body {
-      background-color: #F7EAEC; 
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      margin: 0;
+      font-family: Arial, sans-serif;
       text-align: center;
-      padding: 20px;
     }
-    h1 {
-      color: #FF4CAA;
+    header {
+      padding: 40px 20px;
     }
-    .btn {
-      background: black;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 18px;
+    header h1 { font-size: 2.5em; margin-bottom: 10px; }
+    header p { font-size: 1.2em; }
+    .cover img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: cover;
+    }
+    .menu {
+      margin: 20px;
+    }
+    .menu button {
       margin: 10px;
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h1>Benvenuti al Matrimonio</h1>
-  <a class="btn" id="galleryBtn">Vai alla Galleria</a>
-  <a class="btn" id="uploadBtn">Carica una Foto</a>
+  <header>
+    <h1 id="titolo"></h1>
+    <p id="sottotitolo"></p>
+  </header>
+  <div class="cover">
+    <img id="coverImg" src="" alt="Foto iniziale">
+  </div>
+  <div class="menu">
+    <button onclick="location.href='gallery.html?coppia='+coppia">Galleria</button>
+    <button onclick="location.href='upload.html?coppia='+coppia">Carica</button>
+    <button onclick="location.href='storie.html?coppia='+coppia">La nostra storia</button>
+  </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const coppia = params.get("coppia") || "default";
+    const coppia = params.get("coppia");
 
-    document.getElementById("galleryBtn").href = `gallery.html?coppia=${coppia}`;
-    document.getElementById("uploadBtn").href = `upload.html?coppia=${coppia}`;
+    fetch(`https://matrimoniome.appspot.com/config/${coppia}.json`)
+      .then(res => res.json())
+      .then(cfg => {
+        document.body.style.backgroundColor = cfg.bgColor;
+        document.body.style.color = cfg.textColor;
+        document.getElementById("titolo").innerText = cfg.titolo;
+        document.getElementById("sottotitolo").innerText = cfg.sottotitolo;
+        document.getElementById("coverImg").src = cfg.cover;
+      });
   </script>
 </body>
 </html>
