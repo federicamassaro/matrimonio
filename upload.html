@@ -1,133 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Carica Foto</title>
+  <style>
+    body {
+      background-color: #F7EAEC; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+    h1 { color: #FF4CAA; }
+    .btn {
+      background: black;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
 <body>
+  <h1>Carica una o più foto</h1>
   <input type="file" id="fileInput" multiple>
-  <button class="btn" onclick="uploadFiles()">Carica</button>
-  <div id="progressContainer"></div>
-  <a href="gallery.html" class="pulsante">Galleria</a>
-</body>
-<style>
-  body {
-    background-color: #F7EAEC;
-    font-family: "Brush Script MT", cursive;
-    text-align: center;
-  }
+  <button onclick="uploadPhotos()">Carica</button>
+  <p id="status"></p>
 
-  .btn {
-    background: black;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: opacity 0.3s;
-  }
+  <a class="btn" id="galleryBtn">Vai alla Galleria</a>
+  <a class="btn" id="homeBtn">Home</a>
 
-  .btn:hover {
-    opacity: 0.8;
-  }
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const coppia = params.get("coppia") || "default";
 
-  #progressContainer {
-    margin-top: 20px;
-    width: 80%;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+    document.getElementById("galleryBtn").href = `gallery.html?coppia=${coppia}`;
+    document.getElementById("homeBtn").href = `index.html?coppia=${coppia}`;
 
-  .progressWrapper {
-    margin-bottom: 15px;
-    text-align: left;
-  }
+    function uploadPhotos() {
+      const files = document.getElementById("fileInput").files;
+      if (!files.length) {
+        alert("Seleziona almeno una foto!");
+        return;
+      }
 
-  .progressLabel {
-    font-size: 14px;
-    color: #FF4CAA;
-    margin-bottom: 5px;
-  }
+      const formData = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        formData.append("foto", files[i]);
+      }
 
-  .progressBar {
-    width: 100%;
-    height: 14px;
-    background: #eee;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-  }
-
-  .progressBar div {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, #FF4CAA, #FF85D0);
-    transition: width 0.3s ease;
-  }
-</style>
-
-<script>
-function uploadFiles() {
-  const input = document.getElementById('fileInput');
-  const container = document.getElementById('progressContainer');
-  container.innerHTML = ""; // pulisce le barre precedenti
-
-  const files = input.files;
-  if (files.length === 0) {
-    alert("Seleziona almeno una foto.");
-    return;
-  }
-
-  const progressElements = [];
-  for (const file of files) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "progressWrapper";
-
-    const label = document.createElement("div");
-    label.className = "progressLabel";
-    label.textContent = "Caricamento: " + file.name;
-
-    const bar = document.createElement("div");
-    bar.className = "progressBar";
-
-    const progress = document.createElement("div");
-    bar.appendChild(progress);
-
-    wrapper.appendChild(label);
-    wrapper.appendChild(bar);
-    container.appendChild(wrapper);
-
-    progressElements.push({file, progress, label});
-  }
-
-  const formData = new FormData();
-  for (const f of files) {
-    formData.append("foto", f);
-  }
-
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://matrimoniome.appspot.com/upload", true);
-
-  xhr.upload.addEventListener("progress", (e) => {
-    if (e.lengthComputable) {
-      const percent = (e.loaded / e.total) * 100;
-      progressElements.forEach(pe => pe.progress.style.width = percent + "%");
-    }
-  });
-
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      const response = JSON.parse(xhr.responseText);
-      response.files.forEach(f => {
-        const pe = progressElements.find(p => p.file.name === f.filename);
-        if (pe) pe.label.textContent = "✅ Caricato: " + f.filename;
+      fetch(`https://matrimoniome.appspot.com/upload?coppia=${coppia}`, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("status").textContent = "Foto caricate con successo!";
+      })
+      .catch(() => {
+        document.getElementById("status").textContent = "Errore durante il caricamento.";
       });
-    } else {
-      progressElements.forEach(pe => pe.label.textContent = "❌ Errore: " + pe.file.name);
     }
-  };
-
-  xhr.onerror = () => {
-    progressElements.forEach(pe => pe.label.textContent = "❌ Errore connessione: " + pe.file.name);
-  };
-
-  xhr.send(formData);
-}
-</script>
+  </script>
+</body>
+</html>
