@@ -2,45 +2,47 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Upload Foto - {{ coppia }}</title>
-    <style>
-        body {
-            background-color: {{ colore_sfondo }};
-            font-family: Arial, sans-serif;
-        }
-        input[type=file] {
-            display: block;
-            margin-bottom: 10px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Foto - Matrimonio</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <h1>Carica foto per {{ coppia }}</h1>
-    <form id="uploadForm" enctype="multipart/form-data">
-        <input type="file" name="foto" multiple>
-        <button type="submit">Carica</button>
-    </form>
+<body class="upload-page">
+    <header>
+        <h1>Carica le tue foto</h1>
+    </header>
+    <section class="upload-section">
+        <form id="upload-form" enctype="multipart/form-data">
+            <label for="coppia">Nome coppia:</label>
+            <input type="text" id="coppia" name="coppia" required>
+
+            <label for="foto">Seleziona foto:</label>
+            <input type="file" id="foto" name="foto" multiple required>
+
+            <button type="submit">Carica</button>
+        </form>
+        <div id="upload-result"></div>
+    </section>
 
     <script>
-        const form = document.getElementById("uploadForm");
-        const coppia = "{{ coppia }}";
-
-        form.addEventListener("submit", function(e) {
+        const form = document.getElementById("upload-form");
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const formData = new FormData(form);
-            fetch(`/upload?coppia=${coppia}`, {
+            const coppia = document.getElementById("coppia").value;
+            const files = document.getElementById("foto").files;
+            const formData = new FormData();
+            for (let f of files) formData.append("foto", f);
+
+            const res = await fetch(`/upload?coppia=${coppia}`, {
                 method: "POST",
                 body: formData
-            })
-            .then(res => res.json())
-            .then(result => {
-                if(result.success){
-                    alert("Foto caricate con successo!");
-                    form.reset();
-                } else {
-                    alert("Errore: " + result.error);
-                }
             });
+            const result = await res.json();
+            const resultDiv = document.getElementById("upload-result");
+            if(result.success) {
+                resultDiv.innerHTML = "Caricamento avvenuto con successo!";
+            } else {
+                resultDiv.innerHTML = "Errore: " + result.error;
+            }
         });
     </script>
 </body>
