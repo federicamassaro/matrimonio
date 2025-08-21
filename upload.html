@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <title>Carica Foto</title>
   <style>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const coppia = params.get("coppia");
+
+    fetch(`https://matrimoniome.appspot.com/config/${coppia}.json`)
+      .then(res => res.json())
+      .then(cfg => {
+        document.body.style.backgroundColor = cfg.bgColor;
+        document.body.style.color = cfg.textColor;
+      });
+  </script>
     body {
       background-color: #F7EAEC; 
       display: flex;
