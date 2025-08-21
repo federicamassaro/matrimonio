@@ -14,5 +14,30 @@
         <p>Scopri la nostra storia e le foto più belle!</p>
         <img id="index-photo" src="default-index.jpg" alt="Foto della coppia">
     </section>
+
+    <script>
+        async function loadIndexData(coppia = "default") {
+            try {
+                const res = await fetch(`/index_data?coppia=${coppia}`);
+                const data = await res.json();
+
+                // Aggiorna titolo
+                if (data.title) {
+                    document.getElementById("title").textContent = data.title;
+                }
+
+                // Aggiorna foto
+                if (data.photo_url) {
+                    document.getElementById("index-photo").src = data.photo_url;
+                }
+
+            } catch (err) {
+                console.error("Errore caricamento dati index:", err);
+            }
+        }
+
+        // Carica dati della coppia di default
+        loadIndexData();
+    </script>
 </body>
 </html>
