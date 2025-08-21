@@ -2,28 +2,17 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>{{ titolo_index }}</title>
-    <style>
-        body {
-            background-color: {{ colore_sfondo }};
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        .main-photo {
-            max-width: 80%;
-            height: auto;
-            margin: 20px 0;
-            border-radius: 10px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Matrimonio</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <h1>{{ titolo_index }}</h1>
-    
-    {% if foto_index %}
-    <img src="{{ foto_index }}" alt="Foto principale" class="main-photo">
-    {% endif %}
-
-    <p>Benvenuti alla pagina del matrimonio!</p>
+<body class="index-page">
+    <header>
+        <h1 id="title">Benvenuti al nostro matrimonio</h1>
+    </header>
+    <section class="intro">
+        <p>Scopri la nostra storia e le foto più belle!</p>
+        <img id="index-photo" src="default-index.jpg" alt="Foto della coppia">
+    </section>
 </body>
 </html>
