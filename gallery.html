@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Galleria Matrimonio</title>
+ <script>
+    const params = new URLSearchParams(window.location.search);
+    const coppia = params.get("coppia");
+
+    fetch(`https://matrimoniome.appspot.com/config/${coppia}.json`)
+      .then(res => res.json())
+      .then(cfg => {
+        document.body.style.backgroundColor = cfg.bgColor;
+        document.body.style.color = cfg.textColor;
+      });
+  </script>
   <style>
     body {
       background-color: #F7EAEC; 
