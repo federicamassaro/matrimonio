@@ -1,64 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Matrimonio</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    header {
-      padding: 40px 20px;
-    }
-    header h1 { font-size: 2.5em; margin-bottom: 10px; }
-    header p { font-size: 1.2em; }
-    .cover img {
-      width: 100%;
-      max-height: 400px;
-      object-fit: cover;
-    }
-    .menu {
-      margin: 20px;
-    }
-    .menu button {
-      margin: 10px;
-      padding: 15px 30px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>{{ titolo_index }}</title>
+    <style>
+        body {
+            background-color: {{ colore_sfondo }};
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .main-photo {
+            max-width: 80%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1 id="titolo"></h1>
-    <p id="sottotitolo"></p>
-  </header>
-  <div class="cover">
-    <img id="coverImg" src="" alt="Foto iniziale">
-  </div>
-  <div class="menu">
-    <button onclick="location.href='gallery.html?coppia='+coppia">Galleria</button>
-    <button onclick="location.href='upload.html?coppia='+coppia">Carica</button>
-    <button onclick="location.href='storie.html?coppia='+coppia">La nostra storia</button>
-  </div>
+    <h1>{{ titolo_index }}</h1>
+    
+    {% if foto_index %}
+    <img src="{{ foto_index }}" alt="Foto principale" class="main-photo">
+    {% endif %}
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const coppia = params.get("coppia");
-
-    fetch(`https://matrimoniome.appspot.com/config/${coppia}.json`)
-      .then(res => res.json())
-      .then(cfg => {
-        document.body.style.backgroundColor = cfg.bgColor;
-        document.body.style.color = cfg.textColor;
-        document.getElementById("titolo").innerText = cfg.titolo;
-        document.getElementById("sottotitolo").innerText = cfg.sottotitolo;
-        document.getElementById("coverImg").src = cfg.cover;
-      });
-  </script>
+    <p>Benvenuti alla pagina del matrimonio!</p>
 </body>
 </html>
