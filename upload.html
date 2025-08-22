@@ -21,31 +21,39 @@
             <button type="submit">Carica</button>
         </form>
         <div id="upload-result"></div>
-        <a href="index.html" class="pulsante">Home</a>
-        <a href="gallery.html" class="pulsante">Galleria</a>
+        <a href="index.html" class="pulsante" id="home-btn">Home</a>
+        <a href="gallery.html" class="pulsante" id="gallery-btn">Galleria</a>
     </section>
 
     <script>
+        const params = new URLSearchParams(window.location.search);
+        const coppiaParam = params.get("coppia") || "";
+
+        document.getElementById("coppia").value = coppiaParam;
+
         const form = document.getElementById("upload-form");
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const coppia = document.getElementById("coppia").value;
+            const coppia = document.getElementById("coppia").value.trim();
             const files = document.getElementById("foto").files;
+            if(!coppia || files.length===0){ alert("Inserisci nome coppia e seleziona almeno un file"); return; }
+
             const formData = new FormData();
             for (let f of files) formData.append("foto", f);
 
-            const res = await fetch(`/upload?coppia=${coppia}`, {
-                method: "POST",
-                body: formData
-            });
-            const result = await res.json();
-            const resultDiv = document.getElementById("upload-result");
-            if(result.success) {
-                resultDiv.innerHTML = "Caricamento avvenuto con successo!";
-            } else {
-                resultDiv.innerHTML = "Errore: " + result.error;
+            try{
+                const res = await fetch(`/upload?coppia=${encodeURIComponent(coppia)}`, { method:"POST", body:formData });
+                const result = await res.json();
+                const resultDiv = document.getElementById("upload-result");
+                resultDiv.innerHTML = result.success ? "Caricamento avvenuto con successo!" : "Errore: " + result.error;
+            }catch(err){
+                console.error(err);
+                document.getElementById("upload-result").innerHTML = "Errore imprevisto";
             }
         });
+
+        document.getElementById("home-btn").href = `index.html?coppia=${encodeURIComponent(coppiaParam)}`;
+        document.getElementById("gallery-btn").href = `gallery.html?coppia=${encodeURIComponent(coppiaParam)}`;
     </script>
 </body>
 </html>
