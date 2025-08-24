@@ -220,12 +220,3 @@ async function applicaTemaCoppia(coppia) {
         console.warn("Tema admin non caricato:", err);
     }
 }
-
-// --- Inizializzazione
-window.onload = async () => {
-    const params = new URLSearchParams(window.location.search);
-    const coppia = params.get("coppia") || "default";
-
-    await loadIndexData(coppia);
-    await applicaTemaCoppia(coppia);
-};
