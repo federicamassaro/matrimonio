@@ -10,58 +10,15 @@
     <header>
         <h1 id="title">Benvenuti al nostro matrimonio</h1>
     </header>
+
     <section class="intro">
         <p>Scopri la nostra storia e le foto più belle!</p>
         <img id="index-photo" src="default-index.jpg" alt="Foto della coppia">
     </section>
+
     <a href="gallery.html" class="pulsante" id="galleria-btn">Galleria</a>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const coppia = params.get("coppia") || "default";
-
-        async function loadIndexData(coppia) {
-            try {
-                // URL completo verso App Engine
-                const res = await fetch(`https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${encodeURIComponent(coppia)}`);
-                const data = await res.json();
-
-                if (data.error) {
-                    console.warn("Coppia non trovata, uso default");
-                    return;
-                }
-
-                // Titolo
-                document.getElementById("title").textContent = data.titolo_index || "Benvenuti al nostro matrimonio";
-
-                // Colori e font
-                if (data.colori) {
-                    document.body.style.backgroundColor = data.colori.sfondo || "#ffffff";
-                    document.body.style.color = data.colori.testo || "#000000";
-                    document.getElementById("title").style.fontFamily = data.colori.font || "Arial";
-                }
-
-                // Foto
-                if (data.foto_url) {
-                    document.getElementById("index-photo").src = data.foto_url;
-                }
-
-                // Aggiorna link galleria
-                document.getElementById("galleria-btn").href = `gallery.html?coppia=${encodeURIComponent(coppia)}`;
-
-            } catch (err) {
-                console.error("Errore caricamento dati index:", err);
-            }
-        }
-
-        loadIndexData(coppia);
-        window.onload = async () => {
-            // Applica tema admin appena carica la pagina
-            await applicaTemaCoppia();
-        };
-    </script>
+    <!-- Script principale -->
+    <script src="script.js"></script>
 </body>
 </html>
-
-
-
