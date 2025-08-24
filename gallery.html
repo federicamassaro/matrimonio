@@ -19,10 +19,7 @@
 <script>
         window.onload = async () => {
             // Applica tema admin appena carica la pagina
-            await applicaTemaAdmin();
-
-            // Carica la lista coppie
-            caricaCoppie();
+            await applicaTemaCoppia();
         };
     const params = new URLSearchParams(window.location.search);
     const coppia = params.get("coppia") || "default";
