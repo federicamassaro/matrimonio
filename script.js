@@ -186,32 +186,33 @@ async function applicaTemaCoppia(coppia) {
                     }
                 });
 
-                // --- Overlay automatico se c'è immagine
-                const urlMatch = css.match(/url\(([^)]+)\)/);
-                if(urlMatch){
-                    let overlay = document.getElementById('admin-theme-overlay');
-                    if(!overlay){
-                        overlay = document.createElement('div');
-                        overlay.id = 'admin-theme-overlay';
-                        overlay.className = 'overlay';
-                        overlay.style.position = 'fixed';
-                        overlay.style.top = '0';
-                        overlay.style.left = '0';
-                        overlay.style.right = '0';
-                        overlay.style.bottom = '0';
-                        overlay.style.pointerEvents = 'none';
-                        overlay.style.zIndex = '0';
-                        overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
-                        document.body.appendChild(overlay);
-                    } else {
-                        overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
-                    }
-                } else {
-                    const existingOverlay = document.getElementById('admin-theme-overlay');
-                    if(existingOverlay) existingOverlay.remove();
-                }
-            }
-        }
+// --- Overlay automatico se c'è immagine
+const urlMatch = css.match(/url\(([^)]+)\)/);
+let overlay = document.getElementById('admin-theme-overlay');
+
+if (urlMatch) {
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'admin-theme-overlay';
+        overlay.className = 'overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.zIndex = '-1'; // dietro tutto
+        overlay.style.backgroundImage = `linear-gradient(rgba(${hexToRgb(bgColor)},0.3), rgba(${hexToRgb(bgColorSecondario)},0.3))`;
+        overlay.style.backgroundSize = 'cover';
+        overlay.style.backgroundRepeat = 'no-repeat';
+        overlay.style.backgroundPosition = 'center';
+        document.body.appendChild(overlay);
+    } else {
+        overlay.style.backgroundImage = `linear-gradient(rgba(${hexToRgb(bgColor)},0.3), rgba(${hexToRgb(bgColorSecondario)},0.3))`;
+    }
+} else {
+    if (overlay) overlay.remove();
+}
 
         // --- Aggiorna bottoni, link, tabelle e font globale
         applicaTemaAdminExtra(bgColor, bgColorSecondario, font);
