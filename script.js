@@ -111,10 +111,12 @@ async function applicaTemaCoppia(coppia) {
         console.log("Effetto sfondo scelto:", config.effetto_sfondo);
         console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
 
-        const bgColor = config.bg_color || '#ffffff';
-        const bgColorSecondario = config.bg_color_secondario || '#eeeeee';
-        const textColor = config.text_color || '#000000';
-        const font = config.font_family || 'Arial, Helvetica, sans-serif';
+        const bgColor = config.colori.sfondo || '#ffffff';
+        const bgColorSecondario = config.colori.sfondo_secondario || '#eeeeee';
+        const textColor = config..colori.testo || '#000000';
+        const font = config.colori.font || 'Arial, Helvetica, sans-serif';
+        const effetto_scritta = config.effetto_scritta
+        const effetto_sfondo = config.effetto_sfondo
 
         // Corpo pagina
         document.body.style.backgroundColor = bgColor;
