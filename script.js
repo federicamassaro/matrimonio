@@ -68,89 +68,59 @@ function applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font) {
 async function applicaTemaCoppia(coppia) {
     try {
         const res = await fetch(`https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${encodeURIComponent(coppia)}`);
-        const data = await res.json() || {};
+        const config = await res.json() || {};
 
-        if (data.error) {
-            console.warn("Coppia non trovata, uso default");
-            return;
-        }
+        const bgColor = config.bg_color || '#F7EAEC';
+        const bgColorSecondario = config.bg_color_secondario || '#eeeeee';
+        const textColor = config.text_color || '#000000';
+        const font = config.font_family || 'Arial, Helvetica, sans-serif';
 
-        // --- Titolo e header
-        document.getElementById("title").textContent = data.titolo_index || "Benvenuti al nostro matrimonio";
-        const header = document.querySelector('header');
-        if(header){
-            header.style.backgroundColor = data.colori?.header || '#eee';
-            const h1 = header.querySelector('h1');
-            if(h1) h1.style.fontFamily = data.colori?.font || 'Arial, Helvetica, sans-serif';
-        }
-
-        // --- Corpo pagina
-        const bgColor = data.colori?.sfondo || '#ffffff';
-        const bgColorSecondario = data.colori?.secondario || '#eeeeee';
-        const textColor = data.colori?.testo || '#000000';
-        const font = data.colori?.font || 'Arial, Helvetica, sans-serif';
-
+        // Corpo pagina
         document.body.style.backgroundColor = bgColor;
         document.body.style.color = textColor;
         document.body.style.fontFamily = font;
+        document.body.style.position = 'relative'; // importante per overlay assoluto
 
-        // --- Foto
-        if(data.foto_url){
-            document.getElementById("index-photo").src = data.foto_url;
-        }
-
-        // --- Link galleria
-        document.getElementById("galleria-btn").href = `gallery.html?coppia=${encodeURIComponent(coppia)}`;
-
-        // --- Overlay e effetti sfondo
-        if(data.effetto_sfondo){
-            const effettiRes = await fetch('https://matrimonioapp.ew.r.appspot.com/admin/get_effetti');
-            const effettiData = await effettiRes.json();
-            const effSfondo = effettiData.sfondo.find(e => e.id === data.effetto_sfondo);
-
-            if(effSfondo?.css){
-                let css = effSfondo.css
-                    .replace(/var\(--bg-color\)/g, bgColor)
-                    .replace(/var\(--bg-color-secondario\)/g, bgColorSecondario)
-                    .replace(/var\(--bg-color-rgb\)/g, hexToRgb(bgColor))
-                    .replace(/var\(--bg-color-secondario-rgb\)/g, hexToRgb(bgColorSecondario));
-
-                css.split(';').forEach(rule => {
-                    if(rule.trim()){
-                        let [prop, ...rest] = rule.split(':');
-                        let val = rest.join(':');
-                        if(prop && val) document.body.style.setProperty(prop.trim(), val.trim());
-                    }
-                });
-
-                const urlMatch = css.match(/url\(([^)]+)\)/);
-                let overlay = document.getElementById('admin-theme-overlay');
-                if(urlMatch){
-                    if(!overlay){
-                        overlay = document.createElement('div');
-                        overlay.id = 'admin-theme-overlay';
-                        overlay.className = 'overlay';
-                        overlay.style.position = 'fixed';
-                        overlay.style.top = '0';
-                        overlay.style.left = '0';
-                        overlay.style.right = '0';
-                        overlay.style.bottom = '0';
-                        overlay.style.pointerEvents = 'none';
-                        overlay.style.zIndex = '0';
-                        document.body.appendChild(overlay);
-                    }
-                    overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
-                } else if(overlay){
-                    overlay.remove();
-                }
+        // Header
+        const header = document.querySelector('header');
+        if (header) {
+            header.style.backgroundColor = config.header_color || '#eee';
+            const h1 = header.querySelector('h1');
+            if (h1) {
+                h1.textContent = config.header_text || document.getElementById("title").textContent;
+                h1.style.fontFamily = font;
+                h1.style.position = 'relative';
+                h1.style.zIndex = '2';
             }
         }
 
-        // --- Aggiorna bottoni, link, tabelle e font globale
+        // Foto
+        const indexPhoto = document.getElementById('index-photo');
+        if(indexPhoto){
+            indexPhoto.style.position = 'relative';
+            indexPhoto.style.zIndex = '2';
+        }
+
+        // Overlay per effetto sfondo
+        let overlay = document.getElementById('admin-theme-overlay');
+        if(!overlay){
+            overlay = document.createElement('div');
+            overlay.id = 'admin-theme-overlay';
+            document.body.appendChild(overlay);
+        }
+        overlay.style.position = 'absolute';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.zIndex = '1';
+        overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
+
+        // Applica colori e font a pulsanti, link, tabelle
         applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font);
 
     } catch(err){
-        console.error("Errore applicazione tema coppia:", err);
+        console.warn("Tema coppia non caricato:", err);
     }
 }
-
