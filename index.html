@@ -17,8 +17,17 @@
     </section>
 
     <a href="gallery.html" class="pulsante" id="galleria-btn">Galleria</a>
+
     <!-- Script principale -->
     <script src="script.js"></script>
+<script>
+window.onload = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const coppia = params.get("coppia") || "default";
+
+    await loadIndexData(coppia);
+    await applicaTemaCoppia(coppia);
+};
+</script>
 </body>
 </html>
-
