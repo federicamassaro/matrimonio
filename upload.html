@@ -24,8 +24,15 @@
     <a href="index.html" class="pulsante" id="home-btn">Home</a>
     <a href="gallery.html" class="pulsante" id="gallery-btn">Galleria</a>
 </section>
-
+<script src="script.js"></script>
 <script>
+    window.onload = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const coppia = params.get("coppia") || "default";
+
+    await loadIndexData(coppia);
+    await applicaTemaCoppia(coppia);
+};
     const params = new URLSearchParams(window.location.search);
     const coppiaParam = params.get("coppia") || "";
 
