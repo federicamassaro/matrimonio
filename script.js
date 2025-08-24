@@ -7,7 +7,7 @@ if (form) {
         e.preventDefault();
         const formData = new FormData(form);
         try {
-            const response = await fetch('https://matrimoniome.ew.r.appspot.com/upload', {  // Cambia con il tuo backend URL
+            const response = await fetch('https://matrimonione.ew.r.appspot.com/upload', {  // Cambia con il tuo backend URL
                 method: 'POST',
                 body: formData
             });
@@ -99,7 +99,7 @@ async function loadIndexData(coppia) {
     }
 }
 
-// --- Applica tema coppia principale
+// --- Applica tema coppia principale con effetti
 async function applicaTemaCoppia(coppia) {
     try {
         const res = await fetch(`https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${encodeURIComponent(coppia)}`);
@@ -143,6 +143,34 @@ async function applicaTemaCoppia(coppia) {
 
         // Applica colori e font ai componenti
         applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font);
+
+        // --- Applica effetti
+        const effettiRes = await fetch("https://matrimonioapp.ew.r.appspot.com/admin/get_effetti");
+        const effettiData = await effettiRes.json() || {};
+
+        // Effetto scritta
+        if (config.effetto_scritta) {
+            const effScritta = effettiData.scritta.find(e => e.id === config.effetto_scritta);
+            if (effScritta && effScritta.css) {
+                const style = document.createElement("style");
+                style.innerHTML = effScritta.css.replace(/var\(--text-color\)/g, textColor);
+                document.head.appendChild(style);
+            }
+        }
+
+        // Effetto sfondo
+        if (config.effetto_sfondo) {
+            const effSfondo = effettiData.sfondo.find(e => e.id === config.effetto_sfondo);
+            if (effSfondo && effSfondo.css) {
+                const style = document.createElement("style");
+                style.innerHTML = effSfondo.css
+                    .replace(/var\(--bg-color\)/g, bgColor)
+                    .replace(/var\(--bg-color-secondario\)/g, bgColorSecondario)
+                    .replace(/var\(--bg-color-rgb\)/g, hexToRgb(bgColor))
+                    .replace(/var\(--bg-color-secondario-rgb\)/g, hexToRgb(bgColorSecondario));
+                document.head.appendChild(style);
+            }
+        }
 
     } catch (err) {
         console.warn("Tema coppia non caricato:", err);
