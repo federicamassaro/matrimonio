@@ -7,7 +7,7 @@ if (form) {
         e.preventDefault();
         const formData = new FormData(form);
         try {
-            const response = await fetch('https://matrimoniome.ew.r.appspot.com/upload', {
+            const response = await fetch('https://matrimoniome.ew.r.appspot.com/upload', {  // Cambia con il tuo backend URL
                 method: 'POST',
                 body: formData
             });
@@ -31,7 +31,7 @@ function hexToRgb(hex) {
     const bigint = parseInt(hex, 16);
     const r = (bigint >> 16) & 255;
     const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
+    const b = (bigint & 255);
     return `${r},${g},${b}`;
 }
 
@@ -99,11 +99,17 @@ async function loadIndexData(coppia) {
     }
 }
 
-// --- Applica tema coppia principale con effetti
+// --- Applica tema coppia principale (con log per debug effetti)
 async function applicaTemaCoppia(coppia) {
     try {
         const res = await fetch(`https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${encodeURIComponent(coppia)}`);
         const config = await res.json() || {};
+
+        console.log("Tema coppia:", config);
+        console.log("Effetto scritta scelto:", config.effetto_scritta);
+        console.log("Lista effetti scritta:", config.effetti_scritta_lista);
+        console.log("Effetto sfondo scelto:", config.effetto_sfondo);
+        console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
 
         const bgColor = config.bg_color || '#ffffff';
         const bgColorSecondario = config.bg_color_secondario || '#eeeeee';
@@ -141,38 +147,19 @@ async function applicaTemaCoppia(coppia) {
             logo.src = config.logo_url;
         }
 
-        // --- EFFETTI SCRITTA
-        if (config.effetto_scritta && config.effetti_scritta_lista) {
-            const effetto = config.effetti_scritta_lista.find(e => e.id === config.effetto_scritta);
-            if (effetto && effetto.css) {
-                let css = effetto.css.replace(/var\(--text-color\)/g, textColor);
-                css.split(';').forEach(rule => {
-                    if (rule.trim()) {
-                        let [prop, ...rest] = rule.split(':');
-                        let val = rest.join(':');
-                        if (prop && val) document.body.style.setProperty(prop.trim(), val.trim());
-                    }
-                });
+        // Effetti scritta e sfondo
+        if (config.effetti_scritta_lista && config.effetto_scritta) {
+            const eff = config.effetti_scritta_lista.find(e => e.id === config.effetto_scritta);
+            if (eff) {
+                console.log("Applico effetto scritta:", eff);
+                document.getElementById("title").style.cssText += eff.css;
             }
         }
-
-        // --- EFFETTI SFONDO
-        if (config.effetto_sfondo && config.effetti_sfondo_lista) {
-            const effetto = config.effetti_sfondo_lista.find(e => e.id === config.effetto_sfondo);
-            if (effetto && effetto.css) {
-                let css = effetto.css
-                    .replace(/var\(--bg-color\)/g, bgColor)
-                    .replace(/var\(--bg-color-secondario\)/g, bgColorSecondario)
-                    .replace(/var\(--bg-color-rgb\)/g, hexToRgb(bgColor))
-                    .replace(/var\(--bg-color-secondario-rgb\)/g, hexToRgb(bgColorSecondario));
-
-                css.split(';').forEach(rule => {
-                    if (rule.trim()) {
-                        let [prop, ...rest] = rule.split(':');
-                        let val = rest.join(':');
-                        if (prop && val) document.body.style.setProperty(prop.trim(), val.trim());
-                    }
-                });
+        if (config.effetti_sfondo_lista && config.effetto_sfondo) {
+            const effBg = config.effetti_sfondo_lista.find(e => e.id === config.effetto_sfondo);
+            if (effBg) {
+                console.log("Applico effetto sfondo:", effBg);
+                document.body.style.cssText += effBg.css;
             }
         }
 
