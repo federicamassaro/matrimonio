@@ -21,9 +21,9 @@
         <button type="submit">Carica</button>
     </form>
     <div id="upload-result"></div>
-    <a href="index.html?coppia=nomeCoppia" class="pulsante" id="galleria-btn">Home</a>
+    <a href="index.html" class="pulsante" id="home-btn">Home</a>
 
-    <a href="gallery.html?coppia=nomeCoppia" class="pulsante" id="galleria-btn">Galleria</a>
+    <a href="gallery.html" class="pulsante" id="galleria-btn">Galleria</a>
 
 </section>
 <script src="script.js"></script>
@@ -34,6 +34,9 @@
 
     await loadIndexData(coppia);
     await applicaTemaCoppia(coppia);
+    document.getElementById("galleria-btn").href = `gallery.html?coppia=${encodeURIComponent(coppia)}`;
+    document.getElementById("home-btn").href = `index.html?coppia=${encodeURIComponent(coppia)}`;
+
 };
     const params = new URLSearchParams(window.location.search);
     const coppiaParam = params.get("coppia") || "";
