@@ -17,10 +17,6 @@
 <a href="index.html" class="pulsante" id="home-btn">Home</a>
 
 <script>
-        window.onload = async () => {
-            // Applica tema admin appena carica la pagina
-            await applicaTemaCoppia();
-        };
     const params = new URLSearchParams(window.location.search);
     const coppia = params.get("coppia") || "default";
 
@@ -49,6 +45,10 @@
     }
 
     loadGallery(coppia);
+    window.onload = async () => {
+            // Applica tema admin appena carica la pagina
+            await applicaTemaCoppia();
+        };
 </script>
 </body>
 </html>
