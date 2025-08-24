@@ -15,8 +15,15 @@
 </section>
 <a href="upload.html" class="pulsante" id="upload-btn">Carica una foto</a>
 <a href="index.html" class="pulsante" id="home-btn">Home</a>
-
+<script src="script.js"></script>
 <script>
+    window.onload = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const coppia = params.get("coppia") || "default";
+
+    await loadIndexData(coppia);
+    await applicaTemaCoppia(coppia);
+};
     const params = new URLSearchParams(window.location.search);
     const coppia = params.get("coppia") || "default";
 
@@ -80,12 +87,6 @@
                 console.error("Errore caricamento dati index:", err);
             }
         }
-
-        loadIndexData(coppia);
-        window.onload = async () => {
-            // Applica tema admin appena carica la pagina
-            await applicaTemaCoppia();
-        };
 </script>
 </body>
 </html>
