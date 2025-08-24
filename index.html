@@ -29,6 +29,8 @@ window.onload = async () => {
 
         // Applica tutto il tema e i dati della coppia
         await applicaTemaCoppia(coppia);
+        document.getElementById("galleria-btn").href = `gallery.html?coppia=${encodeURIComponent(coppia)}`;
+
     } catch (err) {
         console.error("Errore inizializzazione pagina:", err);
     }
@@ -36,5 +38,6 @@ window.onload = async () => {
 </script>
 </body>
 </html>
+
 
 
