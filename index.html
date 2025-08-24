@@ -17,10 +17,6 @@
     <a href="gallery.html" class="pulsante" id="galleria-btn">Galleria</a>
 
     <script>
-        window.onload = async () => {
-            // Applica tema admin appena carica la pagina
-            await applicaTemaCoppia();
-        };
         const params = new URLSearchParams(window.location.search);
         const coppia = params.get("coppia") || "default";
 
@@ -59,8 +55,13 @@
         }
 
         loadIndexData(coppia);
+        window.onload = async () => {
+            // Applica tema admin appena carica la pagina
+            await applicaTemaCoppia();
+        };
     </script>
 </body>
 </html>
+
 
 
