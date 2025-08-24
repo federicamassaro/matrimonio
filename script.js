@@ -113,7 +113,7 @@ async function applicaTemaCoppia(coppia) {
 
         const bgColor = config.colori.sfondo || '#ffffff';
         const bgColorSecondario = config.colori.sfondo_secondario || '#eeeeee';
-        const textColor = config..colori.testo || '#000000';
+        const textColor = config.colori.testo || '#000000';
         const font = config.colori.font || 'Arial, Helvetica, sans-serif';
         const effetto_scritta = config.effetto_scritta
         const effetto_sfondo = config.effetto_sfondo
