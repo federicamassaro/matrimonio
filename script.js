@@ -49,7 +49,7 @@ function getContrastColor(rgb) {
 }
 
 // --- Aggiornamento elementi con tema admin
-function applicaTemaAdminExtra(bgColor, bgColorSecondario, font) {
+function applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font) {
     const rgb1 = hexToRgb(bgColor);
     const rgb2 = hexToRgb(bgColorSecondario);
     const coloreTerzo = `rgb(${mixColors(rgb1, rgb2)})`;
@@ -68,9 +68,9 @@ function applicaTemaAdminExtra(bgColor, bgColorSecondario, font) {
 }
 
 // --- Applica tema admin principale
-async function applicaTemaAdmin() {
+async function applicaTemaCoppia() {
     try {
-        const res = await fetch('https://matrimonioapp.ew.r.appspot.com/admin/get_theme?admin=default');
+        const res = await fetch('https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${nomeCoppiaParam}');
         const config = await res.json() || {};
 
         const bgColor = config.bg_color || '#ffffff';
