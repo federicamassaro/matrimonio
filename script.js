@@ -48,7 +48,7 @@ function getContrastColor(rgb) {
     return (r * 0.299 + g * 0.587 + b * 0.114) > 186 ? '#000000' : '#ffffff';
 }
 
-// --- Aggiornamento elementi con tema coppia
+// --- Aggiornamento elementi con tema coppia (solo anteprima e input/select)
 function applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font) {
     const rgb1 = hexToRgb(bgColor);
     const rgb2 = hexToRgb(bgColorSecondario);
@@ -57,11 +57,14 @@ function applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font) {
 
     document.querySelectorAll('button, a, th, td, p, span, h1, h2, h3, h4, h5, h6, label, input, select, textarea')
         .forEach(el => {
-            if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'TH' || el.tagName === 'TD') {
-                el.style.backgroundColor = coloreTerzo;
-                el.style.color = contrastText;
+            if (el.closest('#anteprima') || el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'LABEL') {
+                // Aggiorna solo anteprima e form
+                if (el.tagName === 'BUTTON' || el.tagName === 'A' || el.tagName === 'TH' || el.tagName === 'TD') {
+                    el.style.backgroundColor = coloreTerzo;
+                    el.style.color = contrastText;
+                }
+                el.style.fontFamily = font;
             }
-            el.style.fontFamily = font;
         });
 }
 
@@ -105,23 +108,17 @@ async function applicaTemaCoppia(coppia) {
         const res = await fetch(`https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${encodeURIComponent(coppia)}`);
         const config = await res.json() || {};
 
-        console.log("Tema coppia:", config);
-        console.log("Effetto scritta scelto:", config.effetto_scritta);
-        console.log("Lista effetti scritta:", config.effetti_scritta_lista);
-        console.log("Effetto sfondo scelto:", config.effetto_sfondo);
-        console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
-
         const bgColor = config.bg_color || '#ffffff';
         const bgColorSecondario = config.bg_color_secondario || '#eeeeee';
         const textColor = config.text_color || '#000000';
         const font = config.font_family || 'Arial, Helvetica, sans-serif';
 
-        // Corpo pagina
+        // --- Solo body generale
         document.body.style.backgroundColor = bgColor;
         document.body.style.color = textColor;
         document.body.style.fontFamily = font;
 
-        // Header
+        // --- Header
         const header = document.querySelector('header');
         if (header) {
             header.style.backgroundColor = config.header_color || '#eee';
@@ -132,7 +129,7 @@ async function applicaTemaCoppia(coppia) {
             }
         }
 
-        // Logo
+        // --- Logo
         if (config.logo_url) {
             let logo = document.getElementById('admin-logo');
             if (!logo) {
@@ -147,31 +144,31 @@ async function applicaTemaCoppia(coppia) {
             logo.src = config.logo_url;
         }
 
- // --- Carica effetti scritta e sfondo
+        // --- Carica effetti scritta e sfondo
         const effettiRes = await fetch('https://matrimonioapp.ew.r.appspot.com/admin/get_effetti');
         const effettiData = await effettiRes.json();
         const effettiScritta = effettiData.scritta || [];
         const effettiSfondo = effettiData.sfondo || [];
 
         // --- Applica effetto scritta
-        if(config.effetto_scritta){
+        if (config.effetto_scritta) {
             const effScritta = effettiScritta.find(e => e.id === config.effetto_scritta);
-            if(effScritta && effScritta.css){
+            if (effScritta && effScritta.css) {
                 let css = effScritta.css.replace(/var\(--text-color\)/g, textColor);
                 css.split(';').forEach(rule => {
-                    if(rule.trim()){
+                    if (rule.trim()) {
                         let [prop, ...rest] = rule.split(':');
                         let val = rest.join(':');
-                        if(prop && val) document.body.style.setProperty(prop.trim(), val.trim());
+                        if (prop && val) document.body.style.setProperty(prop.trim(), val.trim());
                     }
                 });
             }
         }
 
         // --- Applica effetto sfondo
-        if(config.effetto_sfondo){
+        if (config.effetto_sfondo) {
             const effSfondo = effettiSfondo.find(e => e.id === config.effetto_sfondo);
-            if(effSfondo && effSfondo.css){
+            if (effSfondo && effSfondo.css) {
                 let css = effSfondo.css
                     .replace(/var\(--bg-color\)/g, bgColor)
                     .replace(/var\(--bg-color-secondario\)/g, bgColorSecondario)
@@ -179,18 +176,18 @@ async function applicaTemaCoppia(coppia) {
                     .replace(/var\(--bg-color-secondario-rgb\)/g, hexToRgb(bgColorSecondario));
 
                 css.split(';').forEach(rule => {
-                    if(rule.trim()){
+                    if (rule.trim()) {
                         let [prop, ...rest] = rule.split(':');
                         let val = rest.join(':');
-                        if(prop && val) document.body.style.setProperty(prop.trim(), val.trim());
+                        if (prop && val) document.body.style.setProperty(prop.trim(), val.trim());
                     }
                 });
 
                 // --- Overlay automatico se c'è immagine
                 const urlMatch = css.match(/url\(([^)]+)\)/);
-                if(urlMatch){
+                if (urlMatch) {
                     let overlay = document.getElementById('admin-theme-overlay');
-                    if(!overlay){
+                    if (!overlay) {
                         overlay = document.createElement('div');
                         overlay.id = 'admin-theme-overlay';
                         overlay.className = 'overlay';
@@ -208,15 +205,22 @@ async function applicaTemaCoppia(coppia) {
                     }
                 } else {
                     const existingOverlay = document.getElementById('admin-theme-overlay');
-                    if(existingOverlay) existingOverlay.remove();
+                    if (existingOverlay) existingOverlay.remove();
                 }
             }
         }
 
-        // --- Aggiorna bottoni, link, tabelle e font globale
+        // --- Aggiorna bottoni, link, tabelle e font globale (solo admin)
         applicaTemaAdminExtra(bgColor, bgColorSecondario, font);
 
-    } catch(err){
+    } catch (err) {
         console.warn("Tema admin non caricato:", err);
     }
 }
+
+// --- Inizializzazione pagina
+window.onload = async () => {
+    await applicaTemaAdmin();         // tema globale admin (body, header)
+    await caricaFontsEdEffetti();     // popola select font/effetti
+    await caricaDatiCoppia();        // imposta valori input e anteprima della coppia
+};
