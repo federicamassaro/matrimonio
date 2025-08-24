@@ -186,7 +186,6 @@ async function applicaTemaCoppia(coppia) {
                     }
                 });
 
-// --- Overlay automatico se c'è immagine
 const urlMatch = css.match(/url\(([^)]+)\)/);
 let overlay = document.getElementById('admin-theme-overlay');
 
@@ -194,7 +193,6 @@ if (urlMatch) {
     if (!overlay) {
         overlay = document.createElement('div');
         overlay.id = 'admin-theme-overlay';
-        overlay.className = 'overlay';
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
         overlay.style.left = '0';
@@ -202,25 +200,18 @@ if (urlMatch) {
         overlay.style.height = '100%';
         overlay.style.pointerEvents = 'none';
         overlay.style.zIndex = '-1'; // dietro tutto
-        overlay.style.backgroundImage = `linear-gradient(rgba(${hexToRgb(bgColor)},0.3), rgba(${hexToRgb(bgColorSecondario)},0.3))`;
-        overlay.style.backgroundSize = 'cover';
-        overlay.style.backgroundRepeat = 'no-repeat';
-        overlay.style.backgroundPosition = 'center';
         document.body.appendChild(overlay);
-    } else {
-        overlay.style.backgroundImage = `linear-gradient(rgba(${hexToRgb(bgColor)},0.3), rgba(${hexToRgb(bgColorSecondario)},0.3))`;
     }
+
+    // Applica gradient + immagine
+    overlay.style.backgroundImage = `linear-gradient(rgba(${hexToRgb(bgColor)},0.3), rgba(${hexToRgb(bgColorSecondario)},0.3)), url(${urlMatch[1]})`;
+    overlay.style.backgroundSize = 'cover';
+    overlay.style.backgroundRepeat = 'no-repeat';
+    overlay.style.backgroundPosition = 'center';
 } else {
     if (overlay) overlay.remove();
 }
 
-        // --- Aggiorna bottoni, link, tabelle e font globale
-        applicaTemaAdminExtra(bgColor, bgColorSecondario, font);
-
-    } catch(err){
-        console.warn("Tema admin non caricato:", err);
-    }
-}
 
 // --- Inizializzazione
 window.onload = async () => {
