@@ -26,6 +26,10 @@
 </section>
 
 <script>
+    window.onload = async () => {
+            // Applica tema admin appena carica la pagina
+            await applicaTemaCoppia();
+        };
     const params = new URLSearchParams(window.location.search);
     const coppiaParam = params.get("coppia") || "";
 
