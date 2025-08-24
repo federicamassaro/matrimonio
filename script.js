@@ -214,7 +214,7 @@ async function applicaTemaCoppia(coppia) {
         }
 
         // --- Aggiorna bottoni, link, tabelle e font globale
-        applicaTemaAdminExtra(bgColor, bgColorSecondario, font);
+        applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font);
 
     } catch(err){
         console.warn("Tema admin non caricato:", err);
