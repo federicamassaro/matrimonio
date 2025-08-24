@@ -23,6 +23,9 @@
 
     await loadIndexData(coppia);
     await applicaTemaCoppia(coppia);
+    document.getElementById("home-btn").href = `upload.html?coppia=${encodeURIComponent(coppia)}`;
+    document.getElementById("upload-btn").href = `index.html?coppia=${encodeURIComponent(coppia)}`;
+
 };
     const params = new URLSearchParams(window.location.search);
     const coppia = params.get("coppia") || "default";
