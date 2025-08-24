@@ -83,7 +83,9 @@
     <img class="foto-storia" src="immagini/matrimoniofrancesca.jpg" alt="Foto nostra 3">
     <p>Preparativi e momenti di gioia condivisa con amici e famiglia.</p>
     
-    <a class="torna-home" href="index.html">Torna alla Home</a>
+    <a class="torna-home" href="index.html" id="home-btn">Torna alla Home</a>
+    <a class="torna-home" href="gallery.html" id="galleria-btn">vai alla galleria</a>
+
   </div>
 </body>
   <script src="script.js"></script>
@@ -94,6 +96,10 @@
 
     await loadIndexData(coppia);
     await applicaTemaCoppia(coppia);
+    document.getElementById("home-btn").href = `index.html?coppia=${encodeURIComponent(coppia)}`;
+    document.getElementById("galleria-btn").href = `gallery.html?coppia=${encodeURIComponent(coppia)}`;
+
+
 };
     const params = new URLSearchParams(window.location.search);
         const coppia = params.get("coppia") || "default";
