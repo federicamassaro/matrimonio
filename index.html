@@ -22,12 +22,18 @@
     <script src="script.js"></script>
 <script>
 window.onload = async () => {
-    const params = new URLSearchParams(window.location.search);
-    const coppia = params.get("coppia") || "default";
+    try {
+        // Prendi il parametro "coppia" dall'URL, default se non presente
+        const params = new URLSearchParams(window.location.search);
+        const coppia = params.get("coppia") || "default";
 
-    await loadIndexData(coppia);
-    await applicaTemaCoppia(coppia);
+        // Applica tutto il tema e i dati della coppia
+        await applicaTemaCoppia(coppia);
+    } catch (err) {
+        console.error("Errore inizializzazione pagina:", err);
+    }
 };
 </script>
 </body>
 </html>
+
