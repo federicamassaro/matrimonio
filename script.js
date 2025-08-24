@@ -147,27 +147,77 @@ async function applicaTemaCoppia(coppia) {
             logo.src = config.logo_url;
         }
 
-        // Effetti scritta e sfondo
-        if (config.effetti_scritta_lista && config.effetto_scritta) {
-            const eff = config.effetti_scritta_lista.find(e => e.id === config.effetto_scritta);
-            if (eff) {
-                console.log("Applico effetto scritta:", eff);
-                document.getElementById("title").style.cssText += eff.css;
-            }
-        }
-        if (config.effetti_sfondo_lista && config.effetto_sfondo) {
-            const effBg = config.effetti_sfondo_lista.find(e => e.id === config.effetto_sfondo);
-            if (effBg) {
-                console.log("Applico effetto sfondo:", effBg);
-                document.body.style.cssText += effBg.css;
+ // --- Carica effetti scritta e sfondo
+        const effettiRes = await fetch('https://matrimonioapp.ew.r.appspot.com/admin/get_effetti');
+        const effettiData = await effettiRes.json();
+        const effettiScritta = effettiData.scritta || [];
+        const effettiSfondo = effettiData.sfondo || [];
+
+        // --- Applica effetto scritta
+        if(config.effetto_scritta){
+            const effScritta = effettiScritta.find(e => e.id === config.effetto_scritta);
+            if(effScritta && effScritta.css){
+                let css = effScritta.css.replace(/var\(--text-color\)/g, textColor);
+                css.split(';').forEach(rule => {
+                    if(rule.trim()){
+                        let [prop, ...rest] = rule.split(':');
+                        let val = rest.join(':');
+                        if(prop && val) document.body.style.setProperty(prop.trim(), val.trim());
+                    }
+                });
             }
         }
 
-        // Applica colori e font ai componenti
-        applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font);
+        // --- Applica effetto sfondo
+        if(config.effetto_sfondo){
+            const effSfondo = effettiSfondo.find(e => e.id === config.effetto_sfondo);
+            if(effSfondo && effSfondo.css){
+                let css = effSfondo.css
+                    .replace(/var\(--bg-color\)/g, bgColor)
+                    .replace(/var\(--bg-color-secondario\)/g, bgColorSecondario)
+                    .replace(/var\(--bg-color-rgb\)/g, hexToRgb(bgColor))
+                    .replace(/var\(--bg-color-secondario-rgb\)/g, hexToRgb(bgColorSecondario));
 
-    } catch (err) {
-        console.warn("Tema coppia non caricato:", err);
+                css.split(';').forEach(rule => {
+                    if(rule.trim()){
+                        let [prop, ...rest] = rule.split(':');
+                        let val = rest.join(':');
+                        if(prop && val) document.body.style.setProperty(prop.trim(), val.trim());
+                    }
+                });
+
+                // --- Overlay automatico se c'è immagine
+                const urlMatch = css.match(/url\(([^)]+)\)/);
+                if(urlMatch){
+                    let overlay = document.getElementById('admin-theme-overlay');
+                    if(!overlay){
+                        overlay = document.createElement('div');
+                        overlay.id = 'admin-theme-overlay';
+                        overlay.className = 'overlay';
+                        overlay.style.position = 'fixed';
+                        overlay.style.top = '0';
+                        overlay.style.left = '0';
+                        overlay.style.right = '0';
+                        overlay.style.bottom = '0';
+                        overlay.style.pointerEvents = 'none';
+                        overlay.style.zIndex = '0';
+                        overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
+                        document.body.appendChild(overlay);
+                    } else {
+                        overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
+                    }
+                } else {
+                    const existingOverlay = document.getElementById('admin-theme-overlay');
+                    if(existingOverlay) existingOverlay.remove();
+                }
+            }
+        }
+
+        // --- Aggiorna bottoni, link, tabelle e font globale
+        applicaTemaAdminExtra(bgColor, bgColorSecondario, font);
+
+    } catch(err){
+        console.warn("Tema admin non caricato:", err);
     }
 }
 
