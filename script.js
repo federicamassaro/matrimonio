@@ -81,9 +81,9 @@ async function loadIndexData(coppia) {
 
         // Colori e font
         if (data.colori) {
-            document.body.style.backgroundColor = data.colori.sfondo || "#ffffff";
-            document.body.style.color = data.colori.testo || "#000000";
-            document.getElementById("title").style.fontFamily = data.colori.font || "Arial";
+            document.body.style.backgroundColor = data.sfondo || "#ffffff";
+            document.body.style.color = data.testo || "#000000";
+            document.getElementById("title").style.fontFamily = data.font || "Arial";
         }
 
         // Foto
@@ -111,10 +111,10 @@ async function applicaTemaCoppia(coppia) {
         console.log("Effetto sfondo scelto:", config.effetto_sfondo);
         console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
 
-        const bgColor = config.colori.sfondo || '#ffffff';
-        const bgColorSecondario = config.colori.sfondo_secondario || '#eeeeee';
-        const textColor = config.colori.testo || '#000000';
-        const font = config.colori.font || 'Arial, Helvetica, sans-serif';
+        const bgColor = config.sfondo || '#ffffff';
+        const bgColorSecondario = config.sfondo_secondario || '#eeeeee';
+        const textColor = config.testo || '#000000';
+        const font = config.font || 'Arial, Helvetica, sans-serif';
         const effetto_scritta = config.effetto_scritta
         const effetto_sfondo = config.effetto_sfondo
 
