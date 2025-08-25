@@ -124,7 +124,7 @@ async function applicaTemaCoppia(coppia) {
         console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
 
         // Corpo pagina
-        document.body.style.background = sfondo;
+        document.body.style.backgroundColor = sfondo;
         document.body.style.color = testo;
         document.body.style.fontFamily = font;
 
