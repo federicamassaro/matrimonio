@@ -26,7 +26,7 @@ window.onload = async () => {
         // Prendi il parametro "coppia" dall'URL, default se non presente
         const params = new URLSearchParams(window.location.search);
         const coppia = params.get("coppia") || "default";
-
+        console.log("coppia", coppia)
         // Applica tutto il tema e i dati della coppia
         await applicaTemaCoppia(coppia);
         document.getElementById("galleria-btn").href = `gallery.html?coppia=${encodeURIComponent(coppia)}`;
@@ -38,6 +38,7 @@ window.onload = async () => {
 </script>
 </body>
 </html>
+
 
 
 
