@@ -100,46 +100,34 @@ async function loadIndexData(coppia) {
 // --- Applica tema coppia principale (con log per debug effetti)
 async function applicaTemaCoppia(coppia) {
     try {
+        // --- Fetch dati coppia
         const res = await fetch(`https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${encodeURIComponent(coppia)}`);
         const config = await res.json() || {};
-
-        console.log("Tema coppia:", config);
-        console.log("Effetto scritta scelto:", config.effetto_scritta);
-        console.log("Lista effetti scritta:", config.effetti_scritta_lista);
-        console.log("Effetto sfondo scelto:", config.effetto_sfondo);
-        console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
 
         const sfondo = config.sfondo || '#ffffff';
         const sfondoSecondario = config.sfondo_secondario || '#eeeeee';
         const testo = config.testo || '#000000';
         const font = config.font || 'Arial, Helvetica, sans-serif';
-        const effetto_scritta = config.effetto_scritta
-        const effetto_sfondo = config.effetto_sfondo
+        const effetto_scritta = config.effetto_scritta;
+        const effetto_sfondo = config.effetto_sfondo;
 
-        console.log("sfondo colore", sfondo);
-        console.log("sfondo secondario colore", sfondoSecondario);
-        console.log("Effetto scritta scelto:", config.effetto_scritta);
-        console.log("Lista effetti scritta:", config.effetti_scritta_lista);
-        console.log("Effetto sfondo scelto:", config.effetto_sfondo);
-        console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
-
-        // Corpo pagina
-        document.body.style.backgroundColor = sfondo;
+        // --- Corpo pagina: gradiente e font
+        document.body.style.background = `linear-gradient(135deg, ${sfondo}, ${sfondoSecondario})`;
         document.body.style.color = testo;
         document.body.style.fontFamily = font;
 
-        // Header
+        // --- Header
         const header = document.querySelector('header');
         if (header) {
             header.style.backgroundColor = config.header_color || '#eee';
             const h1 = header.querySelector('h1');
             if (h1) {
                 h1.textContent = config.header_text || document.getElementById("title").textContent;
-                h1.style.font = font;
+                h1.style.fontFamily = font;
             }
         }
 
-        // Logo
+        // --- Logo
         if (config.logo_url) {
             let logo = document.getElementById('admin-logo');
             if (!logo) {
@@ -154,31 +142,31 @@ async function applicaTemaCoppia(coppia) {
             logo.src = config.logo_url;
         }
 
- // --- Carica effetti scritta e sfondo
+        // --- Carica effetti
         const effettiRes = await fetch('https://matrimonioapp.ew.r.appspot.com/admin/get_effetti');
         const effettiData = await effettiRes.json();
         const effettiScritta = effettiData.scritta || [];
         const effettiSfondo = effettiData.sfondo || [];
 
         // --- Applica effetto scritta
-        if(config.effetto_scritta){
-            const effScritta = effettiScritta.find(e => e.id === config.effetto_scritta);
-            if(effScritta && effScritta.css){
+        if (effetto_scritta) {
+            const effScritta = effettiScritta.find(e => e.id === effetto_scritta);
+            if (effScritta && effScritta.css) {
                 let css = effScritta.css.replace(/var\(--text-color\)/g, testo);
                 css.split(';').forEach(rule => {
-                    if(rule.trim()){
+                    if (rule.trim()) {
                         let [prop, ...rest] = rule.split(':');
                         let val = rest.join(':');
-                        if(prop && val) document.body.style.setProperty(prop.trim(), val.trim());
+                        if (prop && val) document.body.style.setProperty(prop.trim(), val.trim());
                     }
                 });
             }
         }
 
-        // --- Applica effetto sfondo
-        if(config.effetto_sfondo){
-            const effSfondo = effettiSfondo.find(e => e.id === config.effetto_sfondo);
-            if(effSfondo && effSfondo.css){
+        // --- Applica effetto sfondo senza sovrascrivere gradiente
+        if (effetto_sfondo) {
+            const effSfondo = effettiSfondo.find(e => e.id === effetto_sfondo);
+            if (effSfondo && effSfondo.css) {
                 let css = effSfondo.css
                     .replace(/var\(--sfondo\)/g, sfondo)
                     .replace(/var\(--sfondo-secondario\)/g, sfondoSecondario)
@@ -186,18 +174,23 @@ async function applicaTemaCoppia(coppia) {
                     .replace(/var\(--sfondo-secondario-rgb\)/g, hexToRgb(sfondoSecondario));
 
                 css.split(';').forEach(rule => {
-                    if(rule.trim()){
+                    if (rule.trim()) {
                         let [prop, ...rest] = rule.split(':');
                         let val = rest.join(':');
-                        if(prop && val) document.body.style.setProperty(prop.trim(), val.trim());
+                        // Se l’effetto contiene background, usa background-image per non cancellare il gradiente
+                        if (prop.trim() === 'background' || prop.trim() === 'background-color') {
+                            document.body.style.backgroundImage = val.trim();
+                        } else {
+                            document.body.style.setProperty(prop.trim(), val.trim());
+                        }
                     }
                 });
 
                 // --- Overlay automatico se c'è immagine
                 const urlMatch = css.match(/url\(([^)]+)\)/);
-                if(urlMatch){
+                if (urlMatch) {
                     let overlay = document.getElementById('admin-theme-overlay');
-                    if(!overlay){
+                    if (!overlay) {
                         overlay = document.createElement('div');
                         overlay.id = 'admin-theme-overlay';
                         overlay.className = 'overlay';
@@ -215,7 +208,7 @@ async function applicaTemaCoppia(coppia) {
                     }
                 } else {
                     const existingOverlay = document.getElementById('admin-theme-overlay');
-                    if(existingOverlay) existingOverlay.remove();
+                    if (existingOverlay) existingOverlay.remove();
                 }
             }
         }
@@ -223,7 +216,7 @@ async function applicaTemaCoppia(coppia) {
         // --- Aggiorna bottoni, link, tabelle e font globale
         applicaTemaCoppiaExtra(sfondo, sfondoSecondario, font);
 
-    } catch(err){
+    } catch (err) {
         console.warn("Tema admin non caricato:", err);
     }
 }
