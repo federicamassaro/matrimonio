@@ -116,8 +116,8 @@ async function applicaTemaCoppia(coppia) {
         const effetto_scritta = config.effetto_scritta
         const effetto_sfondo = config.effetto_sfondo
 
-        console.log("sfondo colore" sfondo);
-        console.log("sfondo secondario colore" sfondoSecondario);
+        console.log("sfondo colore", sfondo);
+        console.log("sfondo secondario colore", sfondoSecondario);
         console.log("Effetto scritta scelto:", config.effetto_scritta);
         console.log("Lista effetti scritta:", config.effetti_scritta_lista);
         console.log("Effetto sfondo scelto:", config.effetto_sfondo);
