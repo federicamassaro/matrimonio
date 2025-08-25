@@ -178,15 +178,12 @@ async function applicaTemaCoppia(coppia) {
                         let [prop, ...rest] = rule.split(':');
                         let val = rest.join(':');
                         // Se l’effetto contiene background, usa background-image per non cancellare il gradiente
-                       if (prop.trim() === 'background') {
-    document.body.style.background = val.trim();
-} else if (prop.trim() === 'background-image') {
-    document.body.style.backgroundImage = val.trim();
-} else if (prop.trim() === 'background-color') {
-    document.body.style.backgroundColor = val.trim();
+if (prop.trim() === 'background' || prop.trim() === 'background-color') {
+    document.body.style.setProperty('background', val.trim());
 } else {
-    document.body.style.setProperty(prop.trim(), val.trim());
+    document.body.style.setProperty(prop.trim(), val.trim());
 }
+
                     }
                 });
 
