@@ -49,9 +49,9 @@ function getContrastColor(rgb) {
 }
 
 // --- Aggiornamento elementi con tema coppia
-function applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font) {
-    const rgb1 = hexToRgb(bgColor);
-    const rgb2 = hexToRgb(bgColorSecondario);
+function applicaTemaCoppiaExtra(sfondo, sfondoSecondario, font) {
+    const rgb1 = hexToRgb(sfondo);
+    const rgb2 = hexToRgb(sfondoSecondario);
     const coloreTerzo = `rgb(${mixColors(rgb1, rgb2)})`;
     const contrastText = getContrastColor(mixColors(rgb1, rgb2));
 
@@ -61,7 +61,7 @@ function applicaTemaCoppiaExtra(bgColor, bgColorSecondario, font) {
                 el.style.backgroundColor = coloreTerzo;
                 el.style.color = contrastText;
             }
-            el.style.fontFamily = font;
+            el.style.font = font;
         });
 }
 
@@ -83,7 +83,7 @@ async function loadIndexData(coppia) {
         if (data.colori) {
             document.body.style.backgroundColor = data.sfondo || "#ffffff";
             document.body.style.color = data.testo || "#000000";
-            document.getElementById("title").style.fontFamily = data.font || "Arial";
+            document.getElementById("title").style.font = data.font || "Arial";
         }
 
         // Foto
@@ -111,17 +111,17 @@ async function applicaTemaCoppia(coppia) {
         console.log("Effetto sfondo scelto:", config.effetto_sfondo);
         console.log("Lista effetti sfondo:", config.effetti_sfondo_lista);
 
-        const bgColor = config.sfondo || '#ffffff';
-        const bgColorSecondario = config.sfondo_secondario || '#eeeeee';
-        const textColor = config.testo || '#000000';
+        const sfondo = config.sfondo || '#ffffff';
+        const sfondoSecondario = config.sfondo_secondario || '#eeeeee';
+        const testo = config.testo || '#000000';
         const font = config.font || 'Arial, Helvetica, sans-serif';
         const effetto_scritta = config.effetto_scritta
         const effetto_sfondo = config.effetto_sfondo
 
         // Corpo pagina
-        document.body.style.backgroundColor = bgColor;
-        document.body.style.color = textColor;
-        document.body.style.fontFamily = font;
+        document.body.style.backgroundColor = sfondo;
+        document.body.style.testo = testo;
+        document.body.style.font = font;
 
         // Header
         const header = document.querySelector('header');
@@ -130,7 +130,7 @@ async function applicaTemaCoppia(coppia) {
             const h1 = header.querySelector('h1');
             if (h1) {
                 h1.textContent = config.header_text || document.getElementById("title").textContent;
-                h1.style.fontFamily = font;
+                h1.style.font = font;
             }
         }
 
@@ -159,7 +159,7 @@ async function applicaTemaCoppia(coppia) {
         if(config.effetto_scritta){
             const effScritta = effettiScritta.find(e => e.id === config.effetto_scritta);
             if(effScritta && effScritta.css){
-                let css = effScritta.css.replace(/var\(--text-color\)/g, textColor);
+                let css = effScritta.css.replace(/var\(--text-color\)/g, testo);
                 css.split(';').forEach(rule => {
                     if(rule.trim()){
                         let [prop, ...rest] = rule.split(':');
@@ -175,10 +175,10 @@ async function applicaTemaCoppia(coppia) {
             const effSfondo = effettiSfondo.find(e => e.id === config.effetto_sfondo);
             if(effSfondo && effSfondo.css){
                 let css = effSfondo.css
-                    .replace(/var\(--bg-color\)/g, bgColor)
-                    .replace(/var\(--bg-color-secondario\)/g, bgColorSecondario)
-                    .replace(/var\(--bg-color-rgb\)/g, hexToRgb(bgColor))
-                    .replace(/var\(--bg-color-secondario-rgb\)/g, hexToRgb(bgColorSecondario));
+                    .replace(/var\(--sfondo\)/g, sfondo)
+                    .replace(/var\(--sfondo-secondario\)/g, sfondoSecondario)
+                    .replace(/var\(--sfondo-rgb\)/g, hexToRgb(sfondo))
+                    .replace(/var\(--sfondo-secondario-rgb\)/g, hexToRgb(sfondoSecondario));
 
                 css.split(';').forEach(rule => {
                     if(rule.trim()){
@@ -203,10 +203,10 @@ async function applicaTemaCoppia(coppia) {
                         overlay.style.bottom = '0';
                         overlay.style.pointerEvents = 'none';
                         overlay.style.zIndex = '0';
-                        overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
+                        overlay.style.backgroundColor = `rgba(${hexToRgb(sfondo)},0.3)`;
                         document.body.appendChild(overlay);
                     } else {
-                        overlay.style.backgroundColor = `rgba(${hexToRgb(bgColor)},0.3)`;
+                        overlay.style.backgroundColor = `rgba(${hexToRgb(sfondo)},0.3)`;
                     }
                 } else {
                     const existingOverlay = document.getElementById('admin-theme-overlay');
@@ -216,7 +216,7 @@ async function applicaTemaCoppia(coppia) {
         }
 
         // --- Aggiorna bottoni, link, tabelle e font globale
-        applicaTemaAdminExtra(bgColor, bgColorSecondario, font);
+        applicaTemaAdminExtra(sfondo, sfondoSecondario, font);
 
     } catch(err){
         console.warn("Tema admin non caricato:", err);
