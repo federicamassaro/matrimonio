@@ -80,11 +80,9 @@ async function loadIndexData(coppia) {
         document.getElementById("title").textContent = data.titolo_index || "Benvenuti al nostro matrimonio";
 
         // Colori e font
-        if (data.colori) {
-            document.body.style.backgroundColor = data.sfondo || "#ffffff";
-            document.body.style.color = data.testo || "#000000";
-            document.getElementById("title").style.font = data.font || "Arial";
-        }
+        document.body.style.backgroundColor = data.sfondo || "#ffffff";
+        document.body.style.color = data.testo || "#000000";
+        document.getElementById("title").style.font = data.font || "Arial";
 
         // Foto
         if (data.foto_url) {
