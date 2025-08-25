@@ -163,8 +163,10 @@ async function applicaTemaCoppia(coppia) {
             }
         }
 
+        console.log(effetto_sfondo)
         // --- Applica effetto sfondo senza sovrascrivere gradiente
         if (effetto_sfondo) {
+            
             const effSfondo = effettiSfondo.find(e => e.id === effetto_sfondo);
             if (effSfondo && effSfondo.css) {
                 let css = effSfondo.css
