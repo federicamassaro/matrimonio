@@ -50,6 +50,7 @@ function getContrastColor(rgb) {
 
 // --- Aggiornamento elementi con tema coppia
 function applicaTemaCoppiaExtra(sfondo, sfondoSecondario, font) {
+    console.log("dentro applicatemaextra"
     const rgb1 = hexToRgb(sfondo);
     const rgb2 = hexToRgb(sfondoSecondario);
     const coloreTerzo = `rgb(${mixColors(rgb1, rgb2)})`;
@@ -75,7 +76,7 @@ async function loadIndexData(coppia) {
             console.warn("Coppia non trovata, uso default");
             return;
         }
-
+        console.log("sono in loadindex"
         // Titolo
         document.getElementById("title").textContent = data.titolo_index || "Benvenuti al nostro matrimonio";
 
@@ -103,7 +104,7 @@ async function applicaTemaCoppia(coppia) {
         // --- Fetch dati coppia
         const res = await fetch(`https://matrimonioapp.ew.r.appspot.com/admin/get_coppia?coppia=${encodeURIComponent(coppia)}`);
         const config = await res.json() || {};
-
+        console.log("sono in appplicatemacoppia";
         const sfondo = config.sfondo || '#ffffff';
         const sfondoSecondario = config.sfondo_secondario || '#eeeeee';
         const testo = config.testo || '#000000';
@@ -162,7 +163,7 @@ async function applicaTemaCoppia(coppia) {
                 });
             }
         }
-
+        console.log("applico effetto sfondo"
         // --- Applica effetto sfondo senza sovrascrivere gradiente
         if (effetto_sfondo) {
             const effSfondo = effettiSfondo.find(e => e.id === effetto_sfondo);
